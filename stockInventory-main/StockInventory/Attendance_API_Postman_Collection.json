@@ -1,0 +1,279 @@
+{
+    "info": {
+        "name": "Attendance Management API",
+        "description": "API documentation for Attendance Management System",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "1. Authentication",
+            "description": "Authentication endpoints for user login and token refresh",
+            "item": [
+                {
+                    "name": "Login",
+                    "request": {
+                        "method": "POST",
+                        "description": "Authenticate user and get JWT tokens",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin123\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/auth/signin",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "auth", "signin"]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Successful Login",
+                            "code": 200,
+                            "body": "{\n    \"accessToken\": \"eyJhbGciOiJIUzUxMiJ9...\",\n    \"refreshToken\": \"eyJhbGciOiJIUzUxMiJ9...\",\n    \"tokenType\": \"Bearer\",\n    \"id\": 1,\n    \"username\": \"admin\",\n    \"email\": \"admin@example.com\",\n    \"roles\": [\"ROLE_ADMIN\"]\n}"
+                        },
+                        {
+                            "name": "Invalid Credentials",
+                            "code": 401,
+                            "body": "{\n    \"message\": \"Error: Invalid username or password!\"\n}"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "2. Attendance Management",
+            "description": "Endpoints for managing attendance records",
+            "item": [
+                {
+                    "name": "Create Attendance",
+                    "request": {
+                        "method": "POST",
+                        "description": "Create a new attendance record (Requires MODERATOR or ADMIN role)",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{jwt_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"empId\": \"EMP001\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"role\": \"Developer\",\n    \"attendanceDate\": \"2024-01-15\",\n    \"timeIn\": \"09:00:00\",\n    \"timeOut\": \"17:00:00\",\n    \"status\": \"PRESENT\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/attendance",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "attendance"]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Successful Creation",
+                            "code": 201,
+                            "body": "{\n    \"id\": 1,\n    \"empId\": \"EMP001\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"role\": \"Developer\",\n    \"attendanceDate\": \"2024-01-15\",\n    \"timeIn\": \"09:00:00\",\n    \"timeOut\": \"17:00:00\",\n    \"status\": \"PRESENT\"\n}"
+                        },
+                        {
+                            "name": "Duplicate Entry",
+                            "code": 400,
+                            "body": "{\n    \"message\": \"Error: Attendance already exists for this employee on this date!\"\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Get All Attendance",
+                    "request": {
+                        "method": "GET",
+                        "description": "Retrieve all attendance records (Requires USER, MODERATOR, or ADMIN role)",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{jwt_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/attendance",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "attendance"]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Successful Retrieval",
+                            "code": 200,
+                            "body": "[\n    {\n        \"id\": 1,\n        \"empId\": \"EMP001\",\n        \"firstName\": \"John\",\n        \"lastName\": \"Doe\",\n        \"role\": \"Developer\",\n        \"attendanceDate\": \"2024-01-15\",\n        \"timeIn\": \"09:00:00\",\n        \"timeOut\": \"17:00:00\",\n        \"status\": \"PRESENT\"\n    }\n]"
+                        }
+                    ]
+                },
+                {
+                    "name": "Get Attendance by Employee",
+                    "request": {
+                        "method": "GET",
+                        "description": "Retrieve attendance records for a specific employee",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{jwt_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/attendance/employee/EMP001",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "attendance", "employee", "EMP001"]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Successful Retrieval",
+                            "code": 200,
+                            "body": "[\n    {\n        \"id\": 1,\n        \"empId\": \"EMP001\",\n        \"firstName\": \"John\",\n        \"lastName\": \"Doe\",\n        \"role\": \"Developer\",\n        \"attendanceDate\": \"2024-01-15\",\n        \"timeIn\": \"09:00:00\",\n        \"timeOut\": \"17:00:00\",\n        \"status\": \"PRESENT\"\n    }\n]"
+                        }
+                    ]
+                },
+                {
+                    "name": "Get Attendance by Date Range",
+                    "request": {
+                        "method": "GET",
+                        "description": "Retrieve attendance records within a date range",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{jwt_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/attendance/date-range?startDate=2024-01-01&endDate=2024-01-31",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "attendance", "date-range"],
+                            "query": [
+                                {
+                                    "key": "startDate",
+                                    "value": "2024-01-01"
+                                },
+                                {
+                                    "key": "endDate",
+                                    "value": "2024-01-31"
+                                }
+                            ]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Successful Retrieval",
+                            "code": 200,
+                            "body": "[\n    {\n        \"id\": 1,\n        \"empId\": \"EMP001\",\n        \"firstName\": \"John\",\n        \"lastName\": \"Doe\",\n        \"role\": \"Developer\",\n        \"attendanceDate\": \"2024-01-15\",\n        \"timeIn\": \"09:00:00\",\n        \"timeOut\": \"17:00:00\",\n        \"status\": \"PRESENT\"\n    }\n]"
+                        }
+                    ]
+                },
+                {
+                    "name": "Update Attendance",
+                    "request": {
+                        "method": "PUT",
+                        "description": "Update an existing attendance record (Requires MODERATOR or ADMIN role)",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{jwt_token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"empId\": \"EMP001\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"role\": \"Senior Developer\",\n    \"attendanceDate\": \"2024-01-15\",\n    \"timeIn\": \"09:00:00\",\n    \"timeOut\": \"18:00:00\",\n    \"status\": \"PRESENT\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/api/attendance/1",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "attendance", "1"]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Successful Update",
+                            "code": 200,
+                            "body": "{\n    \"id\": 1,\n    \"empId\": \"EMP001\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"role\": \"Senior Developer\",\n    \"attendanceDate\": \"2024-01-15\",\n    \"timeIn\": \"09:00:00\",\n    \"timeOut\": \"18:00:00\",\n    \"status\": \"PRESENT\"\n}"
+                        },
+                        {
+                            "name": "Not Found",
+                            "code": 404,
+                            "body": "{\n    \"timestamp\": \"2025-06-15T12:00:00.000+00:00\",\n    \"status\": 404,\n    \"error\": \"Not Found\",\n    \"path\": \"/api/attendance/1\"\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete Attendance",
+                    "request": {
+                        "method": "DELETE",
+                        "description": "Delete an attendance record (Requires ADMIN role)",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{jwt_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/attendance/1",
+                            "host": ["{{baseUrl}}"],
+                            "path": ["api", "attendance", "1"]
+                        }
+                    },
+                    "response": [
+                        {
+                            "name": "Successful Deletion",
+                            "code": 200,
+                            "body": "{\n    \"message\": \"Attendance record deleted successfully\"\n}"
+                        },
+                        {
+                            "name": "Not Found",
+                            "code": 404,
+                            "body": "{\n    \"timestamp\": \"2025-06-15T12:00:00.000+00:00\",\n    \"status\": 404,\n    \"error\": \"Not Found\",\n    \"path\": \"/api/attendance/1\"\n}"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "type": "text/javascript",
+                "exec": [""]
+            }
+        },
+        {
+            "listen": "test",
+            "script": {
+                "type": "text/javascript",
+                "exec": [""]
+            }
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:8080",
+            "type": "string"
+        }
+    ]
+}

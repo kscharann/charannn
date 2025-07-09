@@ -1,0 +1,370 @@
+{
+	"info": {
+		"_postman_id": "updated-product-uuid-12345",
+		"name": "📦 Updated Product APIs - Cosmetics Example",
+		"description": "Updated Product API collection with your exact data format - Cosmetics example",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12345"
+	},
+	"item": [
+		{
+			"name": "📋 Get All Products",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response is an array\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.be.an('array');",
+							"});",
+							"",
+							"pm.test(\"Products have required fields\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    if (jsonData.length > 0) {",
+							"        pm.expect(jsonData[0]).to.have.property('id');",
+							"        pm.expect(jsonData[0]).to.have.property('code');",
+							"        pm.expect(jsonData[0]).to.have.property('product');",
+							"        pm.expect(jsonData[0]).to.have.property('brand');",
+							"        pm.expect(jsonData[0]).to.have.property('category');",
+							"        pm.expect(jsonData[0]).to.have.property('price');",
+							"        pm.expect(jsonData[0]).to.have.property('color');",
+							"        ",
+							"        // Save first product ID for other tests",
+							"        pm.environment.set(\"product_id\", jsonData[0].id);",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/products",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products"
+					]
+				},
+				"description": "Get all products (requires USER+ role)"
+			},
+			"response": []
+		},
+		{
+			"name": "🔍 Get Product by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Product has all required fields\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData).to.have.property('code');",
+							"    pm.expect(jsonData).to.have.property('product');",
+							"    pm.expect(jsonData).to.have.property('brand');",
+							"    pm.expect(jsonData).to.have.property('category');",
+							"    pm.expect(jsonData).to.have.property('price');",
+							"    pm.expect(jsonData).to.have.property('color');",
+							"    pm.expect(jsonData).to.have.property('thumbnailImage');",
+							"    pm.expect(jsonData).to.have.property('subImages');",
+							"    pm.expect(jsonData).to.have.property('description');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/products/{{product_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products",
+						"{{product_id}}"
+					]
+				},
+				"description": "Get specific product by ID (requires USER+ role)"
+			},
+			"response": []
+		},
+		{
+			"name": "➕ Create Cosmetic Product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Cosmetic product created successfully\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData.code).to.eql('21244');",
+							"    pm.expect(jsonData.product).to.eql('powder');",
+							"    pm.expect(jsonData.brand).to.eql('ponds');",
+							"    pm.expect(jsonData.category).to.eql('cosmetics');",
+							"    pm.expect(jsonData.price).to.eql(123);",
+							"    pm.expect(jsonData.color).to.eql('Yellow');",
+							"    ",
+							"    // Save created product ID",
+							"    pm.environment.set(\"created_product_id\", jsonData.id);",
+							"});",
+							"",
+							"pm.test(\"Product has correct cosmetic data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.thumbnailImage).to.exist;",
+							"    pm.expect(jsonData.subImages).to.exist;",
+							"    pm.expect(jsonData.description).to.exist;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{admin_jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"code\": \"21244\",\n    \"product\": \"powder\",\n    \"brand\": \"ponds\",\n    \"category\": \"cosmetics\",\n    \"price\": 123,\n    \"color\": \"Yellow\",\n    \"thumbnailImage\": \"string\",\n    \"subImages\": \"string\",\n    \"description\": \"string\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/products",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products"
+					]
+				},
+				"description": "Create a cosmetic product with your exact format"
+			},
+			"response": []
+		},
+		{
+			"name": "➕ Create Lipstick Product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Lipstick created successfully\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData.code).to.eql('21245');",
+							"    pm.expect(jsonData.product).to.eql('lipstick');",
+							"    pm.expect(jsonData.brand).to.eql('maybelline');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{admin_jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"code\": \"21245\",\n    \"product\": \"lipstick\",\n    \"brand\": \"maybelline\",\n    \"category\": \"cosmetics\",\n    \"price\": 89,\n    \"color\": \"Red\",\n    \"thumbnailImage\": \"lipstick-thumb.jpg\",\n    \"subImages\": \"lipstick1.jpg,lipstick2.jpg\",\n    \"description\": \"Long-lasting matte lipstick\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/products",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products"
+					]
+				},
+				"description": "Create another cosmetic product example"
+			},
+			"response": []
+		},
+		{
+			"name": "✏️ Update Product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Product updated successfully\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData.product).to.eql('updated powder');",
+							"    pm.expect(jsonData.price).to.eql(150);",
+							"    pm.expect(jsonData.color).to.eql('Pink');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{admin_jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"code\": \"21244\",\n    \"product\": \"updated powder\",\n    \"brand\": \"ponds\",\n    \"category\": \"cosmetics\",\n    \"price\": 150,\n    \"color\": \"Pink\",\n    \"thumbnailImage\": \"updated-powder-thumb.jpg\",\n    \"subImages\": \"updated-powder1.jpg,updated-powder2.jpg\",\n    \"description\": \"Updated premium face powder with new formula\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/products/{{created_product_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products",
+						"{{created_product_id}}"
+					]
+				},
+				"description": "Update existing cosmetic product"
+			},
+			"response": []
+		},
+		{
+			"name": "🗑️ Delete Product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Product deleted successfully\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include('deleted successfully');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{admin_jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/products/{{created_product_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products",
+						"{{created_product_id}}"
+					]
+				},
+				"description": "Delete cosmetic product (requires ADMIN role)"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8081",
+			"type": "string"
+		}
+	]
+}

@@ -1,0 +1,72 @@
+{
+  "info": {
+    "name": "Attendance API - Upload Photo",
+    "description": "Postman collection for uploading attendance photo with timestamp overlay.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Upload Attendance Photo",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "photo",
+              "type": "file",
+              "src": ""
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/attendance/{{attendanceId}}/photo",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "attendance", "{{attendanceId}}", "photo"]
+        },
+        "description": "Upload a photo for an attendance record. The image will have the current date and time overlaid as a watermark. Requires MODERATOR or ADMIN role."
+      },
+      "response": [
+        {
+          "name": "Success",
+          "code": 200,
+          "body": "{\n    \"id\": 1,\n    \"empId\": \"EMP001\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"role\": \"Developer\",\n    \"attendanceDate\": \"2024-01-15\",\n    \"timeIn\": \"09:00:00\",\n    \"timeOut\": \"17:00:00\",\n    \"status\": \"PRESENT\",\n    \"photoBase64\": \"base64_encoded_photo_data\",\n    \"photoTimestamp\": \"2024-01-15T09:00:00\"\n}"
+        },
+        {
+          "name": "Error - Not Found",
+          "code": 404,
+          "body": "{\n  \"message\": \"Error: Attendance record not found\"\n}"
+        },
+        {
+          "name": "Error - Bad Request",
+          "code": 400,
+          "body": "{\n  \"message\": \"Error: Photo file is empty\"\n}"
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "attendanceId",
+      "value": "1",
+      "type": "string"
+    }
+  ]
+}

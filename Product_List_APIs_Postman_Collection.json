@@ -1,0 +1,657 @@
+{
+	"info": {
+		"_postman_id": "product-list-uuid-12345",
+		"name": "📋 Product List APIs",
+		"description": "Complete Product List API collection for Stock Inventory System with various listing scenarios",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12345"
+	},
+	"item": [
+		{
+			"name": "📋 Get All Products",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response is an array\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.be.an('array');",
+							"    console.log('Total products found:', jsonData.length);",
+							"});",
+							"",
+							"pm.test(\"Products have required fields\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    if (jsonData.length > 0) {",
+							"        console.log('Sample product:', JSON.stringify(jsonData[0], null, 2));",
+							"        pm.expect(jsonData[0]).to.have.property('id');",
+							"        pm.expect(jsonData[0]).to.have.property('code');",
+							"        pm.expect(jsonData[0]).to.have.property('product');",
+							"        pm.expect(jsonData[0]).to.have.property('brand');",
+							"        pm.expect(jsonData[0]).to.have.property('category');",
+							"        pm.expect(jsonData[0]).to.have.property('price');",
+							"        pm.expect(jsonData[0]).to.have.property('color');",
+							"        ",
+							"        // Save first product ID for other tests",
+							"        pm.environment.set(\"product_id\", jsonData[0].id);",
+							"        pm.environment.set(\"product_code\", jsonData[0].code);",
+							"    } else {",
+							"        console.log('No products found in the system');",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/products",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products"
+					]
+				},
+				"description": "Get all products in the system (requires USER+ role)"
+			},
+			"response": []
+		},
+		{
+			"name": "🔍 Get Product by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Product details are complete\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    console.log('Product details:', JSON.stringify(jsonData, null, 2));",
+							"    ",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData).to.have.property('code');",
+							"    pm.expect(jsonData).to.have.property('product');",
+							"    pm.expect(jsonData).to.have.property('brand');",
+							"    pm.expect(jsonData).to.have.property('category');",
+							"    pm.expect(jsonData).to.have.property('price');",
+							"    pm.expect(jsonData).to.have.property('color');",
+							"    pm.expect(jsonData).to.have.property('thumbnailImage');",
+							"    pm.expect(jsonData).to.have.property('subImages');",
+							"    pm.expect(jsonData).to.have.property('description');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/products/{{product_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products",
+						"{{product_id}}"
+					]
+				},
+				"description": "Get specific product by ID (requires USER+ role)"
+			},
+			"response": []
+		},
+		{
+			"name": "➕ Add New Product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Product added successfully\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    console.log('Added product:', JSON.stringify(jsonData, null, 2));",
+							"    ",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData).to.have.property('code');",
+							"    pm.expect(jsonData).to.have.property('product');",
+							"    pm.expect(jsonData).to.have.property('brand');",
+							"    pm.expect(jsonData).to.have.property('category');",
+							"    pm.expect(jsonData).to.have.property('price');",
+							"    pm.expect(jsonData).to.have.property('color');",
+							"    pm.expect(jsonData).to.have.property('thumbnailImage');",
+							"    pm.expect(jsonData).to.have.property('subImages');",
+							"    pm.expect(jsonData).to.have.property('description');",
+							"    ",
+							"    // Save created product ID",
+							"    pm.environment.set(\"created_product_id\", jsonData.id);",
+							"    pm.environment.set(\"created_product_code\", jsonData.code);",
+							"});",
+							"",
+							"pm.test(\"Product data matches input\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.code).to.eql('21244');",
+							"    pm.expect(jsonData.product).to.eql('powder');",
+							"    pm.expect(jsonData.brand).to.eql('ponds');",
+							"    pm.expect(jsonData.category).to.eql('cosmetics');",
+							"    pm.expect(jsonData.price).to.eql(123);",
+							"    pm.expect(jsonData.color).to.eql('Yellow');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{admin_jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"code\": \"21244\",\n    \"product\": \"powder\",\n    \"brand\": \"ponds\",\n    \"category\": \"cosmetics\",\n    \"price\": 123,\n    \"color\": \"Yellow\",\n    \"thumbnailImage\": \"https://example.com/powder-thumb.jpg\",\n    \"subImages\": \"https://example.com/powder1.jpg,https://example.com/powder2.jpg\",\n    \"description\": \"Premium face powder for smooth and flawless skin\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/products",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products"
+					]
+				},
+				"description": "Add a new product with all required fields: Code, Product, Brand, Category, Price, Color, ThumbnailImage, SubImages, Description"
+			},
+			"response": []
+		},
+		{
+			"name": "➕ Add Lipstick Product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Lipstick added successfully\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    console.log('Added lipstick:', JSON.stringify(jsonData, null, 2));",
+							"    pm.expect(jsonData.code).to.eql('21245');",
+							"    pm.expect(jsonData.product).to.eql('lipstick');",
+							"    pm.expect(jsonData.brand).to.eql('maybelline');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{admin_jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"code\": \"21245\",\n    \"product\": \"lipstick\",\n    \"brand\": \"maybelline\",\n    \"category\": \"cosmetics\",\n    \"price\": 89,\n    \"color\": \"Red\",\n    \"thumbnailImage\": \"https://example.com/lipstick-thumb.jpg\",\n    \"subImages\": \"https://example.com/lipstick1.jpg,https://example.com/lipstick2.jpg\",\n    \"description\": \"Long-lasting matte lipstick with rich color payoff\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/products",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products"
+					]
+				},
+				"description": "Add another cosmetic product example - Lipstick"
+			},
+			"response": []
+		},
+		{
+			"name": "➕ Add Foundation Product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Foundation added successfully\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    console.log('Added foundation:', JSON.stringify(jsonData, null, 2));",
+							"    pm.expect(jsonData.code).to.eql('21246');",
+							"    pm.expect(jsonData.product).to.eql('foundation');",
+							"    pm.expect(jsonData.brand).to.eql('loreal');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{admin_jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"code\": \"21246\",\n    \"product\": \"foundation\",\n    \"brand\": \"loreal\",\n    \"category\": \"cosmetics\",\n    \"price\": 156,\n    \"color\": \"Beige\",\n    \"thumbnailImage\": \"https://example.com/foundation-thumb.jpg\",\n    \"subImages\": \"https://example.com/foundation1.jpg,https://example.com/foundation2.jpg\",\n    \"description\": \"Full coverage liquid foundation for all skin types\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/products",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products"
+					]
+				},
+				"description": "Add foundation product example"
+			},
+			"response": []
+		},
+		{
+			"name": "🏷️ Get Products by Category",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Filtered products by category\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    console.log('Cosmetics products found:', jsonData.length);",
+							"    ",
+							"    if (jsonData.length > 0) {",
+							"        jsonData.forEach(function(product, index) {",
+							"            console.log(`Product ${index + 1}:`, {",
+							"                code: product.code,",
+							"                product: product.product,",
+							"                brand: product.brand,",
+							"                category: product.category,",
+							"                price: product.price,",
+							"                color: product.color",
+							"            });",
+							"        });",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/products?category=cosmetics",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products"
+					],
+					"query": [
+						{
+							"key": "category",
+							"value": "cosmetics"
+						}
+					]
+				},
+				"description": "Get products filtered by category (cosmetics)"
+			},
+			"response": []
+		},
+		{
+			"name": "🔍 Search Products by Brand",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Brand search results\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    console.log('Ponds brand products:', jsonData.length);",
+							"    ",
+							"    if (jsonData.length > 0) {",
+							"        jsonData.forEach(function(product, index) {",
+							"            console.log(`Ponds Product ${index + 1}:`, {",
+							"                code: product.code,",
+							"                product: product.product,",
+							"                brand: product.brand,",
+							"                price: product.price,",
+							"                color: product.color",
+							"            });",
+							"        });",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/products?brand=ponds",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products"
+					],
+					"query": [
+						{
+							"key": "brand",
+							"value": "ponds"
+						}
+					]
+				},
+				"description": "Get products filtered by brand (Ponds)"
+			},
+			"response": []
+		},
+		{
+			"name": "💰 Get Products by Price Range",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Price range filter results\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    console.log('Products in price range 50-200:', jsonData.length);",
+							"    ",
+							"    if (jsonData.length > 0) {",
+							"        jsonData.forEach(function(product, index) {",
+							"            console.log(`Product ${index + 1}:`, {",
+							"                code: product.code,",
+							"                product: product.product,",
+							"                brand: product.brand,",
+							"                price: product.price,",
+							"                category: product.category",
+							"            });",
+							"            pm.expect(product.price).to.be.at.least(50);",
+							"            pm.expect(product.price).to.be.at.most(200);",
+							"        });",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/products?minPrice=50&maxPrice=200",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products"
+					],
+					"query": [
+						{
+							"key": "minPrice",
+							"value": "50"
+						},
+						{
+							"key": "maxPrice",
+							"value": "200"
+						}
+					]
+				},
+				"description": "Get products within price range (50-200)"
+			},
+			"response": []
+		},
+		{
+			"name": "📄 Get Products with Pagination",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Pagination results\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    console.log('Page 1 results (limit 5):', jsonData.length);",
+							"    ",
+							"    if (jsonData.length > 0) {",
+							"        console.log('First 5 products:');",
+							"        jsonData.forEach(function(product, index) {",
+							"            console.log(`${index + 1}. ${product.code} - ${product.product} (${product.brand}) - $${product.price}`);",
+							"        });",
+							"        pm.expect(jsonData.length).to.be.at.most(5);",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/products?page=0&size=5",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "5"
+						}
+					]
+				},
+				"description": "Get products with pagination (page 1, 5 items)"
+			},
+			"response": []
+		},
+		{
+			"name": "🔢 Get Products Sorted by Price",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Products sorted by price\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    console.log('Products sorted by price (ascending):', jsonData.length);",
+							"    ",
+							"    if (jsonData.length > 1) {",
+							"        console.log('Price sorted products:');",
+							"        jsonData.forEach(function(product, index) {",
+							"            console.log(`${index + 1}. ${product.product} - $${product.price}`);",
+							"        });",
+							"        ",
+							"        // Check if sorted correctly",
+							"        for (let i = 1; i < jsonData.length; i++) {",
+							"            pm.expect(jsonData[i].price).to.be.at.least(jsonData[i-1].price);",
+							"        }",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/products?sort=price&order=asc",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products"
+					],
+					"query": [
+						{
+							"key": "sort",
+							"value": "price"
+						},
+						{
+							"key": "order",
+							"value": "asc"
+						}
+					]
+				},
+				"description": "Get products sorted by price (ascending)"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8081",
+			"type": "string"
+		}
+	]
+}

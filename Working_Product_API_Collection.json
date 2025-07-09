@@ -1,0 +1,199 @@
+{
+	"info": {
+		"_postman_id": "working-product-uuid-12345",
+		"name": "📦 Working Product APIs - Your Format",
+		"description": "Working Product API collection with your exact data format that matches your database schema",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12345"
+	},
+	"item": [
+		{
+			"name": "📋 Get All Products",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response is an array\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.be.an('array');",
+							"    console.log('Products found:', jsonData.length);",
+							"    if (jsonData.length > 0) {",
+							"        console.log('First product:', JSON.stringify(jsonData[0], null, 2));",
+							"        pm.environment.set(\"product_id\", jsonData[0].id);",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/products",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products"
+					]
+				},
+				"description": "Get all products - check the response format"
+			},
+			"response": []
+		},
+		{
+			"name": "➕ Create Product - Your Format",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201 or 200\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							"",
+							"if (pm.response.code === 201 || pm.response.code === 200) {",
+							"    pm.test(\"Product created successfully\", function () {",
+							"        var jsonData = pm.response.json();",
+							"        console.log('Created product:', JSON.stringify(jsonData, null, 2));",
+							"        pm.expect(jsonData).to.have.property('id');",
+							"        pm.environment.set(\"created_product_id\", jsonData.id);",
+							"    });",
+							"} else {",
+							"    pm.test(\"Check error message\", function () {",
+							"        console.log('Error response:', pm.response.text());",
+							"    });",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{admin_jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"code\": \"21244\",\n    \"product\": \"powder\",\n    \"brand\": \"ponds\",\n    \"category\": \"cosmetics\",\n    \"price\": 123,\n    \"color\": \"Yellow\",\n    \"thumbnailImage\": \"string\",\n    \"subImages\": \"string\",\n    \"description\": \"string\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/products",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products"
+					]
+				},
+				"description": "Create product with your exact format"
+			},
+			"response": []
+		},
+		{
+			"name": "➕ Create Lipstick - Alternative",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201 or 200\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							"",
+							"if (pm.response.code === 201 || pm.response.code === 200) {",
+							"    pm.test(\"Lipstick created successfully\", function () {",
+							"        var jsonData = pm.response.json();",
+							"        console.log('Created lipstick:', JSON.stringify(jsonData, null, 2));",
+							"        pm.expect(jsonData).to.have.property('id');",
+							"    });",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{admin_jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"code\": \"21245\",\n    \"product\": \"lipstick\",\n    \"brand\": \"maybelline\",\n    \"category\": \"cosmetics\",\n    \"price\": 89,\n    \"color\": \"Red\",\n    \"thumbnailImage\": \"lipstick-thumb.jpg\",\n    \"subImages\": \"lipstick1.jpg,lipstick2.jpg\",\n    \"description\": \"Long-lasting matte lipstick\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/products",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products"
+					]
+				},
+				"description": "Create lipstick product"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8081",
+			"type": "string"
+		}
+	]
+}

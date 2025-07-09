@@ -1,0 +1,398 @@
+{
+	"info": {
+		"_postman_id": "product-collection-uuid-12345",
+		"name": "📦 Stock Inventory - Product APIs",
+		"description": "Complete Product Management API collection for Stock Inventory System with CRUD operations and role-based access control",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12345"
+	},
+	"item": [
+		{
+			"name": "📋 Get All Products",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response is an array\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.be.an('array');",
+							"});",
+							"",
+							"pm.test(\"Products have required fields\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    if (jsonData.length > 0) {",
+							"        pm.expect(jsonData[0]).to.have.property('id');",
+							"        pm.expect(jsonData[0]).to.have.property('code');",
+							"        pm.expect(jsonData[0]).to.have.property('product');",
+							"        pm.expect(jsonData[0]).to.have.property('brand');",
+							"        pm.expect(jsonData[0]).to.have.property('category');",
+							"        pm.expect(jsonData[0]).to.have.property('price');",
+							"        ",
+							"        // Save first product ID for other tests",
+							"        pm.environment.set(\"product_id\", jsonData[0].id);",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/products",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products"
+					]
+				},
+				"description": "Get all products (requires USER+ role)"
+			},
+			"response": []
+		},
+		{
+			"name": "🔍 Get Product by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Product has all required fields\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData).to.have.property('code');",
+							"    pm.expect(jsonData).to.have.property('product');",
+							"    pm.expect(jsonData).to.have.property('brand');",
+							"    pm.expect(jsonData).to.have.property('category');",
+							"    pm.expect(jsonData).to.have.property('price');",
+							"    pm.expect(jsonData).to.have.property('color');",
+							"    pm.expect(jsonData).to.have.property('description');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/products/{{product_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products",
+						"{{product_id}}"
+					]
+				},
+				"description": "Get specific product by ID (requires USER+ role)"
+			},
+			"response": []
+		},
+		{
+			"name": "➕ Create New Product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Product created successfully\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData).to.have.property('code');",
+							"    pm.expect(jsonData.code).to.eql('LAPTOP001');",
+							"    ",
+							"    // Save created product ID",
+							"    pm.environment.set(\"created_product_id\", jsonData.id);",
+							"});",
+							"",
+							"pm.test(\"Product has correct data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.product).to.eql('Gaming Laptop');",
+							"    pm.expect(jsonData.brand).to.eql('Dell');",
+							"    pm.expect(jsonData.category).to.eql('Electronics');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{mod_jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"code\": \"LAPTOP001\",\n    \"product\": \"Gaming Laptop\",\n    \"brand\": \"Dell\",\n    \"category\": \"Electronics\",\n    \"price\": 1299.99,\n    \"color\": \"Black\",\n    \"thumbnailImage\": \"https://example.com/laptop-thumb.jpg\",\n    \"subImages\": \"https://example.com/laptop1.jpg,https://example.com/laptop2.jpg\",\n    \"description\": \"High-performance gaming laptop with RTX graphics card and 16GB RAM\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/products",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products"
+					]
+				},
+				"description": "Create a new product (requires MODERATOR+ role)"
+			},
+			"response": []
+		},
+		{
+			"name": "✏️ Update Product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Product updated successfully\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData.product).to.eql('Updated Gaming Laptop Pro');",
+							"    pm.expect(jsonData.price).to.eql(1399.99);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{mod_jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"code\": \"LAPTOP001\",\n    \"product\": \"Updated Gaming Laptop Pro\",\n    \"brand\": \"Dell\",\n    \"category\": \"Electronics\",\n    \"price\": 1399.99,\n    \"color\": \"Silver\",\n    \"thumbnailImage\": \"https://example.com/laptop-updated-thumb.jpg\",\n    \"subImages\": \"https://example.com/laptop-updated1.jpg,https://example.com/laptop-updated2.jpg\",\n    \"description\": \"Updated high-performance gaming laptop with RTX 4070 graphics card and 32GB RAM\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/products/{{created_product_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products",
+						"{{created_product_id}}"
+					]
+				},
+				"description": "Update existing product (requires MODERATOR+ role)"
+			},
+			"response": []
+		},
+		{
+			"name": "🗑️ Delete Product",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Product deleted successfully\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include('deleted successfully');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{admin_jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/products/{{created_product_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products",
+						"{{created_product_id}}"
+					]
+				},
+				"description": "Delete product (requires ADMIN role)"
+			},
+			"response": []
+		},
+		{
+			"name": "❌ Create Product - Duplicate Code Error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Error message for duplicate code\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include('Product code already exists');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{mod_jwt_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"code\": \"LAPTOP001\",\n    \"product\": \"Another Laptop\",\n    \"brand\": \"HP\",\n    \"category\": \"Electronics\",\n    \"price\": 999.99,\n    \"color\": \"Blue\",\n    \"description\": \"This should fail due to duplicate code\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/products",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products"
+					]
+				},
+				"description": "Test duplicate product code error"
+			},
+			"response": []
+		},
+		{
+			"name": "❌ Get Product - Not Found",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/products/99999",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products",
+						"99999"
+					]
+				},
+				"description": "Test product not found error"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8081",
+			"type": "string"
+		}
+	]
+}

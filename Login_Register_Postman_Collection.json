@@ -1,0 +1,357 @@
+{
+	"info": {
+		"_postman_id": "login-register-uuid-12345",
+		"name": "🔐 Login & Register APIs",
+		"description": "Simple Login and Registration API collection for Stock Inventory System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12345"
+	},
+	"item": [
+		{
+			"name": "📝 Register User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"User registered successfully\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"registered successfully\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"john_doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\",\n    \"role\": [\"user\"]\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/signup",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"signup"
+					]
+				},
+				"description": "Register a new user account"
+			},
+			"response": []
+		},
+		{
+			"name": "📝 Register Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Admin registered successfully\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"registered successfully\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"admin_user\",\n    \"email\": \"admin@company.com\",\n    \"password\": \"admin123\",\n    \"role\": [\"admin\"]\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/signup",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"signup"
+					]
+				},
+				"description": "Register an admin user account"
+			},
+			"response": []
+		},
+		{
+			"name": "📝 Register Moderator",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Moderator registered successfully\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"registered successfully\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"moderator_user\",\n    \"email\": \"moderator@company.com\",\n    \"password\": \"mod123\",\n    \"role\": [\"mod\"]\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/signup",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"signup"
+					]
+				},
+				"description": "Register a moderator user account"
+			},
+			"response": []
+		},
+		{
+			"name": "🔑 Login User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Login successful - JWT token received\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.token).to.exist;",
+							"    pm.expect(jsonData.type).to.eql(\"Bearer\");",
+							"    ",
+							"    // Save token for future requests",
+							"    pm.environment.set(\"jwt_token\", jsonData.token);",
+							"    pm.environment.set(\"user_id\", jsonData.id);",
+							"    pm.environment.set(\"username\", jsonData.username);",
+							"    pm.environment.set(\"user_email\", jsonData.email);",
+							"});",
+							"",
+							"pm.test(\"User details are correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.username).to.exist;",
+							"    pm.expect(jsonData.email).to.exist;",
+							"    pm.expect(jsonData.roles).to.be.an('array');",
+							"    pm.expect(jsonData.roles).to.include('ROLE_USER');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"john_doe\",\n    \"password\": \"password123\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/signin",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"signin"
+					]
+				},
+				"description": "Login with username and password to get JWT token"
+			},
+			"response": []
+		},
+		{
+			"name": "🔑 Login Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Admin login successful\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.token).to.exist;",
+							"    pm.expect(jsonData.type).to.eql(\"Bearer\");",
+							"    ",
+							"    // Save admin token",
+							"    pm.environment.set(\"admin_jwt_token\", jsonData.token);",
+							"    pm.environment.set(\"admin_user_id\", jsonData.id);",
+							"    pm.environment.set(\"admin_username\", jsonData.username);",
+							"});",
+							"",
+							"pm.test(\"User has admin role\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.roles).to.include('ROLE_ADMIN');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"admin_user\",\n    \"password\": \"admin123\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/signin",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"signin"
+					]
+				},
+				"description": "Login as admin to get admin privileges"
+			},
+			"response": []
+		},
+		{
+			"name": "🔑 Login Moderator",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Moderator login successful\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.token).to.exist;",
+							"    pm.expect(jsonData.type).to.eql(\"Bearer\");",
+							"    ",
+							"    // Save moderator token",
+							"    pm.environment.set(\"mod_jwt_token\", jsonData.token);",
+							"    pm.environment.set(\"mod_user_id\", jsonData.id);",
+							"    pm.environment.set(\"mod_username\", jsonData.username);",
+							"});",
+							"",
+							"pm.test(\"User has moderator role\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.roles).to.include('ROLE_MODERATOR');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"moderator_user\",\n    \"password\": \"mod123\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/signin",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"signin"
+					]
+				},
+				"description": "Login as moderator to get moderator privileges"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8081",
+			"type": "string"
+		}
+	]
+}
