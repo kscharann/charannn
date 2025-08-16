@@ -2,11 +2,14 @@ C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInve
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\config\SecurityConfig.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\controller\AttendanceController.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\controller\AuthController.java
+C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\controller\EmployeeController.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\controller\InvoiceController.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\controller\ProductController.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\controller\PurchaseController.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\dto\AttendanceRequest.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\dto\AttendanceResponse.java
+C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\dto\EmployeeRequest.java
+C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\dto\EmployeeResponse.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\dto\InvoiceRequest.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\dto\InvoiceResponse.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\dto\JwtResponse.java
@@ -21,6 +24,7 @@ C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInve
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\model\Attendance.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\model\EAttendanceStatus.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\model\EInvoiceStatus.java
+C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\model\Employee.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\model\EPaymentStatus.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\model\ERole.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\model\Invoice.java
@@ -29,6 +33,7 @@ C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInve
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\model\Role.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\model\User.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\repository\AttendanceRepository.java
+C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\repository\EmployeeRepository.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\repository\InvoiceRepository.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\repository\ProductRepository.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\repository\PurchaseRepository.java
@@ -39,4 +44,5 @@ C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInve
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\security\jwt\JwtUtils.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\security\services\UserDetailsImpl.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\security\services\UserDetailsServiceImpl.java
+C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\service\PhotoStorageService.java
 C:\Users\Charann\Downloads\stockInventory-main (2)\stockInventory-main\StockInventory\src\main\java\com\example\stockinventorysystem\StockInventorySystemApplication.java
